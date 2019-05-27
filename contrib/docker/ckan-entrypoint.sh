@@ -1,4 +1,8 @@
 #!/bin/sh
+
+#/usr/local/bin/ckan-pip install -e ${CKAN_SRC}
+#chown -R ckan:ckan /usr/lib/ckan/venv/src/ckan
+
 set -e
 
 # URL for the primary database, in the format expected by sqlalchemy (required
