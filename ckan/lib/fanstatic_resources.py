@@ -89,7 +89,7 @@ def create_library(name, path, depend_base=True):
                 if _library.name == superseded_library:
                     kw['supersedes'] = [_library.known_resources[superseded_resource_path]]
                     break
-        resource = Resource(library, path, **kw)
+        resource = Resource(library, path.replace(os.sep, '/'), **kw)
 
         # Add our customised ordering
         if path in custom_render_order:
@@ -106,7 +106,7 @@ def create_library(name, path, depend_base=True):
 
         # add the resource to this module
         fanstatic_name = '%s/%s' % (lib_name, path)
-        setattr(module, fanstatic_name, resource)
+        setattr(module, fanstatic_name.replace(os.sep, '/'), resource)
         return resource
 
     resource_path = os.path.join(os.path.dirname(__file__), path)
@@ -209,6 +209,7 @@ def create_library(name, path, depend_base=True):
 
     # order resource_list so that resources are created in the correct order
     for resource_name in reversed(order):
+        resource_name = os.path.normpath(resource_name)
         if resource_name in resource_list:
             resource_list.remove(resource_name)
             resource_list.insert(0, resource_name)

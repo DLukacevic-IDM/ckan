@@ -327,7 +327,12 @@ def ckan_after_request(response):
     # Set CORS headers if necessary
     response = set_cors_headers_for_response(response)
 
-    r_time = time.time() - g.__timer
+    if hasattr(g, '__timer'):
+        r_time = time.time() - g.__timer
+    else:
+        log.warn(' %s render time unavailable ("__timer" attribute is missing)')
+        r_time = 0
+
     url = request.environ['CKAN_CURRENT_URL'].split('?')[0]
 
     log.info(' %s render time %.3f seconds' % (url, r_time))
