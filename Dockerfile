@@ -30,6 +30,7 @@ ENV CKAN_VENV $CKAN_HOME/venv
 ENV CKAN_SRC $CKAN_VENV/src/ckan
 ENV CKAN_CONFIG /etc/ckan
 ENV CKAN_STORAGE_PATH=/var/lib/ckan
+ENV CKAN_INI $CKAN_CONFIG/production.ini
 
 # Build-time variables specified by docker-compose.yml / .env
 ARG CKAN_SITE_URL
@@ -44,10 +45,13 @@ RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
     ln -s $CKAN_VENV/bin/paster /usr/local/bin/ckan-paster
 
 # Setup CKAN
-COPY requirement*.txt $CKAN_SRC/
+COPY *requirement*.txt $CKAN_SRC/
 RUN ckan-pip install -U pip && \
     ckan-pip install --upgrade --no-cache-dir -r $CKAN_SRC/requirement-setuptools.txt && \
     ckan-pip install --upgrade --no-cache-dir -r $CKAN_SRC/requirements.txt
+
+#RUN ckan-pip install -U pip && \
+#    ckan-pip install --upgrade --no-cache-dir -r $CKAN_SRC/dev-requirements.txt
 
 ADD . $CKAN_SRC/
 RUN ckan-pip install -e $CKAN_SRC/ && \
