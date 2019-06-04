@@ -2,25 +2,27 @@ REM This script will setup CKAN local windows dev environment for easier debuggi
 REM This will replace CKAN docker container. Other components should run as docker containers.
 REM Based on https://github.com/ckan/ckan/wiki/How-to-Install-CKAN-2.5.2-on-Windows-7
 
-SET ts=%DATE:~-4%%DATE:~4,2%%DATE:~7,2%_%TIME:~0,2%%TIME:~3,2%%TIME:~6,2%
-SET ts=%ts: =0%
-
 pushd %~dp0
-pushd ..\..\..\
 
-IF EXIST who.ini REN who.ini who_%ts%.ini
-IF EXIST development.ini REN development.ini development_%ts%.ini
+IF EXIST development.ini del development.ini /P
 
-copy ckan\config\who.ini . /Y
-copy .\contrib\docker\windows-local\development.ini . /Y
-
-pip install -r requirements.txt
-pip install python-magic-bin==0.4.14
+pip install -r ..\..\..\requirements.txt
+pip install python-magic-bin==0.4.14 python-dotenv==0.10.3 configparser==3.7.4
 pip install --upgrade bleach
 
-docker stop ckan
+docker-compose -f ..\docker-compose.yml down
+docker-compose -f ..\docker-compose.yml build db solr
+docker-compose -f ..\docker-compose.yml up -d db solr
+REM redis datapusher
+
+copy ckan\config\who.ini . /Y
+
+paster make-config ckan development.ini
+python populate_ini.py
 paster --plugin=ckan db init -c development.ini
-REM paster serve development.ini
 
 popd
-popd
+
+ECHO To debug CKAN use IDE (like PyCharm). To start CKAN directly use the below "paster" command, then open http://localhost:5000
+ECHO paster serve development.ini
+

@@ -13,3 +13,4 @@ ARG DS_RO_PASS
 
 # Include datastore setup scripts
 ADD ./contrib/docker/postgresql/docker-entrypoint-initdb.d /docker-entrypoint-initdb.d
+# RUN chown -R postgres:postgres /var/lib/postgresql/data
