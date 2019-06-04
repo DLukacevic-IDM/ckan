@@ -1,4 +1,4 @@
-##Setup Windows Dev Environment
+## Setup Windows Dev Environment
 
 ### Install from docker-compose
 Run below script or follow instructions to install from docker-compose  
@@ -12,7 +12,7 @@ Open http://localhost:5000
 Run below script or follow instructions from the Wiki   
 https://github.com/ckan/ckan/wiki/How-to-Install-CKAN-2.5.2-on-Windows-7
 
-windows-local\setup.cmd  
+setup.cmd  
 
 In PyCharm, open Run -> Edit Configuration:  
 Script path:        C:\git\ckan\contrib\docker\windows-local\paster.py   
