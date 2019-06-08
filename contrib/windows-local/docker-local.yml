@@ -2,13 +2,6 @@ version: "3"
 
 
 services:
-  ckan:
-    volumes:
-      - ${CKAN_VOLUME_DIR}/config:/etc/ckan
-      - ${CKAN_VOLUME_DIR}/home:/usr/lib/ckan
-      - ${CKAN_VOLUME_DIR}/storage:/var/lib/ckan
-      # To make container run from the latest code without rebuilding
-      #- ../../:/usr/lib/ckan/venv/src/ckan
 
   datapusher:
     ports:
