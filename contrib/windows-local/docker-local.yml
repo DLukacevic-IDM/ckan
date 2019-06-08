@@ -1,0 +1,27 @@
+version: "3"
+
+
+services:
+  ckan:
+    volumes:
+      - ${CKAN_VOLUME_DIR}/config:/etc/ckan
+      - ${CKAN_VOLUME_DIR}/home:/usr/lib/ckan
+      - ${CKAN_VOLUME_DIR}/storage:/var/lib/ckan
+      # To make container run from the latest code without rebuilding
+      #- ../../:/usr/lib/ckan/venv/src/ckan
+
+  datapusher:
+    ports:
+    - "8800:8800"
+
+  db:
+    ports:
+      - "5432:5432"
+
+  solr:
+    ports:
+      - "8983:8983"
+
+  redis:
+    ports:
+      - "6379:6379"
