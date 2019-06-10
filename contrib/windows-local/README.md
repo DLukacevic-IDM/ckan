@@ -1,4 +1,4 @@
-### CKAN Windows Development Environment
+# CKAN Windows Development Environment
 
 Context: these scripts enable two scenarios:
 - Running and debugging CKAN python code locally (from IDE like PyCharm) and 
@@ -6,18 +6,20 @@ Context: these scripts enable two scenarios:
 
 In both scenarios backend components (Postgres, Solr, Redis and Datapusher) run as Docker containers.
 
-#### Setup CKAN locally from the source  
-Create Python 2.7 virtual environment using Anaconda 
+### Setup CKAN locally from the source  
+Create Python 2.7 virtual environment using Anaconda or using virtualenv 
 
-    conda create -n ckan python=2.7
+- Using Anaconda (latest):
 
-or using virtualenv (after installing Python 2.7)
+      conda create -n ckan python=2.7
 
-    pip install virtualenv
-    mkvirtualenv --system-site-packages ckan
-    workon ckan
+- Using Python 2.7 virtualenv
+
+      pip install virtualenv
+      mkvirtualenv --system-site-packages ckan
+      workon ckan
     
-Run below to setup CKAN locally and run it from the command line (to confirm the setup was successful). 
+Setup locally and run it from the command line (to confirm the setup was successful). 
 
     cd c:\git\ckan\contrib\windows-local     
     setup.cmd
@@ -26,7 +28,7 @@ Run below to setup CKAN locally and run it from the command line (to confirm the
     explorer http://localhost:5000/   
  
 
-Debug or run with PyCharm using paster.py and the below configuration  
+Debug with PyCharm using paster.py and the below configuration  
 
     In PyCharm open Run, Edit Configuration as set:  
     
@@ -37,9 +39,8 @@ Debug or run with PyCharm using paster.py and the below configuration
     serve development.ini  
 
 
-### Run CKAN as a Docker container 
-Run below script to build the ckan Docker image using the latest CKAN code and run all components as Docker containers. 
-  
+### Run CKAN locally from docker-compose
+Build Docker image using the latest CKAN code and run all components as Docker containers.  
 
     cd c:\git\ckan\contrib\windows-local  
     run_docker-compose.cmd test  
