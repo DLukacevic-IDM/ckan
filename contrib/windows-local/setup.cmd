@@ -18,8 +18,8 @@ pip install python-magic-bin==0.4.14 python-dotenv==0.10.3 configparser==3.7.4
 pip install --upgrade bleach
 
 REM Creates config files
-IF NOT EXIST who.ini MKLINK who.ini ckan\config\who.ini
-IF NOT EXIST %cd%\development.ini (
+IF NOT EXIST who.ini MKLINK who.ini ..\..\ckan\config\who.ini
+IF NOT EXIST development.ini (
   paster make-config --no-interactive ckan development.ini
   python populate_ini.py
 )
