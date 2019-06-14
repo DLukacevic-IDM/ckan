@@ -47,6 +47,11 @@ Build Docker image using the latest CKAN code and run all components as Docker c
     explorer http://localhost:5000/  
   
 
+### Run CKAN automated tests
+	you must install npm and nodejs (https://nodejs.org/en/ "nodejs")
+	cd c:\git\ckan\contrib\windows-local  
+    setup_test.cmd 
+
 ###### References  
 How to install on Windows 7:  
 https://github.com/ckan/ckan/wiki/How-to-Install-CKAN-2.5.2-on-Windows-7  
