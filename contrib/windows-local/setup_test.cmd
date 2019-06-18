@@ -17,16 +17,10 @@ docker exec -it db runuser -l ckan -c "psql -c \"CREATE USER datastore_write WIT
 docker exec -it db runuser -l ckan -c "createdb -O datastore_write datastore_test -E utf-8"
 
 cd contrib/windows-local
-REM initialize db and set permission (todo: make it work)
-REM ECHO off
-
-REM SETLOCAL EnableDelayedExpansion
-REM   for /f "usebackq tokens=*" %%a in ('paster datastore set-permissions -c test-core.ini') do ( set var=!var!%%x)
-REM ENDLOCAL
-REM ECHO ON
-REM ECHO %var%
-
-docker exec -it db runuser -l ckan -c "psql -c \"%var%\""
+REM initialize db and set permission
+paster datastore set-permissions -c test-core.ini > testscript.txt
+docker cp testscript.txt db:/tmp/testscript.txt
+docker exec -it db runuser -l ckan -c "psql -f /tmp/testscript.txt"
 paster db init -c test-core.ini
 
 START paster serve test-core.ini
@@ -34,7 +28,7 @@ TIMEOUT 10
 
 REM install npm packages and run ui tests
 START /wait CMD /c npm install -g mocha-phantomjs@3.5.0 phantomjs@~1.9.1 mocha-xunit-reporter
-mocha-phantomjs http://localhost:5000/base/test/index.html -R xunit>test_mocha.xml
+CALL mocha-phantomjs http://localhost:5000/base/test/index.html -R xunit>test_mocha.xml
 
 cd ../../
 nosetests -v --ckan --ckan-migration --reset-db  --with-pylons=test-core.ini -x --with-coverage --cover-package=ckan --cover-package=ckanext --with-xunit --xunit-file=ckan_test.xml ckan ckanext
