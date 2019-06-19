@@ -9,7 +9,8 @@ python setup.py develop
 
 REM Create test db and users
 docker exec -it db adduser --disabled-password --gecos "" ckan
-docker exec -it db runuser -l ckan -c "createdb -O ckan ckan_test -E utf-8"
+docker exec -it db runuser -l ckan -c "psql -c \"CREATE USER ckan_default WITH PASSWORD 'pass' NOSUPERUSER NOCREATEDB NOCREATEROLE;\""
+docker exec -it db runuser -l ckan -c "createdb -O ckan_default ckan_test -E utf-8"
 
 REM Create datastore db users
 docker exec -it db runuser -l ckan -c "psql -c \"CREATE USER datastore_read WITH PASSWORD 'pass' NOSUPERUSER NOCREATEDB NOCREATEROLE;\""
@@ -31,11 +32,11 @@ START /wait CMD /c npm install -g mocha-phantomjs@3.5.0 phantomjs@~1.9.1 mocha-x
 CALL mocha-phantomjs http://localhost:5000/base/test/index.html -R xunit>test_mocha.xml
 
 cd ../../
-nosetests -v --ckan --ckan-migration --reset-db  --with-pylons=test-core.ini -x --with-coverage --cover-package=ckan --cover-package=ckanext --with-xunit --xunit-file=ckan_test.xml ckan ckanext
+nosetests -v --ckan --ckan-migration --reset-db  --with-pylons=contrib/windows-local/test-core.ini --with-coverage --cover-package=ckan --cover-package=ckanext --with-xunit --xunit-file=ckan_test.xml ckan ckanext
 ECHO if you want to run individual tests add --tests for example: --tests=TestAppDispatcher.test_ask_around_flask_core_and_pylons_extension_route
 ECHO add --with-html --html-report=test.html for better reporting
 
-
+PAUSE
 REM stop web server (todo: find a better way to do it)
 taskkill /IM python.exe /F
 
