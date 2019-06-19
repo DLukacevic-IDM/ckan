@@ -15,7 +15,7 @@ docker exec -it db runuser -l ckan -c "createdb -O ckan_default ckan_test -E utf
 REM Create datastore db users
 docker exec -it db runuser -l ckan -c "psql -c \"CREATE USER datastore_read WITH PASSWORD 'pass' NOSUPERUSER NOCREATEDB NOCREATEROLE;\""
 docker exec -it db runuser -l ckan -c "psql -c \"CREATE USER datastore_write WITH PASSWORD 'pass' NOSUPERUSER NOCREATEDB NOCREATEROLE;\""
-docker exec -it db runuser -l ckan -c "createdb -O datastore_write datastore_test -E utf-8"
+docker exec -it db runuser -l ckan -c "createdb -O ckan_default datastore_test -E utf-8"
 
 cd contrib/windows-local
 REM initialize db and set permission
