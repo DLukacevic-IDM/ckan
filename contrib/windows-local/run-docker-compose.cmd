@@ -18,12 +18,14 @@ IF "%command%"=="test" (
   CALL :COPY_CKAN_LOCAL_TO_VOLUME
 )
 
-IF "%command%"=="down"  CALL :DOWN
-IF "%command%"=="buid"  CALL :BUILD
-IF "%command%"=="up"    CALL :UP
-IF "%command%"=="buid-b"  CALL :BUILD_BACKEND
-IF "%command%"=="up-b"    CALL :UP_BACKEND
-IF "%command%"=="logs"  CALL :LOGS %2
+IF "%command%"=="down"      CALL :DOWN
+IF "%command%"=="buid"      CALL :BUILD
+IF "%command%"=="build-c"   CALL :BUILD_CKAN
+IF "%command%"=="up"        CALL :UP
+IF "%command%"=="buid-b"    CALL :BUILD_BACKEND
+IF "%command%"=="up-b"      CALL :UP_BACKEND
+IF "%command%"=="up-c"      CALL :RELOAD_CKAN
+IF "%command%"=="logs"      CALL :LOGS %2
 
 REM TODO
 REM backup
@@ -34,6 +36,10 @@ GOTO :END
 
 :BUILD
 docker-compose -f ..\docker\docker-compose.yml -f docker-local.yml build
+EXIT /B
+
+:BUILD_CKAN
+docker-compose -f ..\docker\docker-compose.yml -f docker-local.yml build ckan
 EXIT /B
 
 :UP
@@ -49,9 +55,17 @@ EXIT /B
 
 :BUILD_BACKEND
 docker-compose -f ..\docker\docker-compose.yml -f docker-local.yml build db solr redis
+EXIT /B
 
 :UP_BACKEND
 docker-compose -f ..\docker\docker-compose.yml -f docker-local.yml up -d db solr redis
+EXIT /B
+
+:RELOAD_CKAN
+docker-compose -f ..\docker\docker-compose.yml -f docker-local.yml stop ckan
+docker-compose -f ..\docker\docker-compose.yml -f docker-local.yml kill ckan
+docker-compose -f ..\docker\docker-compose.yml -f docker-local.yml up -d ckan
+EXIT /B
 
 :LOGS
 SET tail=%1
@@ -69,6 +83,7 @@ EXIT /B
 docker cp %USERPROFILE%\ckan\storage\resources ckan:/var/lib/ckan/resources
 docker cp %USERPROFILE%\ckan\storage\storage ckan:/var/lib/ckan/storage
 docker cp %USERPROFILE%\ckan\storage\webassets ckan:/var/lib/ckan/webassets
+EXIT /B
 
 :COPY_CKAN_VOLUME_TO_LOCAL
 REM TODO

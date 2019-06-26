@@ -34,8 +34,6 @@ REM Setting this env. variable allows using "paster" commands without explicitly
 SET CKAN_INI=%cd%\ckan\contrib\windows-local\development.ini
 paster --plugin=ckan db init
 
-pip uninstall ckan -y
-
 popd
 popd
 
